@@ -1,2 +1,2 @@
 # React-Todo
-A basic todo app that makes use of the useReducer hook.
+A basic todo app that will eventually become unnecessarily complex.
