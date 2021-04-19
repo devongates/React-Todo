@@ -8,7 +8,11 @@ const Todo = () => {
 	const [task, setTask] = useState('')
 	const [isEditing, setIsEditing] = useState(false)
 	const [editId, setEditId] = useState(null)
-	const [isAlert, setIsAlert] = useState(false)
+	const [alert, setAlert] = useState({
+		show: false,
+		msg: '',
+		type: '',
+	})
 
 	useEffect(() => {
 		if (tasks) {
@@ -18,7 +22,7 @@ const Todo = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (!task) {
-			alert('Please enter value')
+			handleAlert(true, 'Please enter value', 'danger')
 			return
 		}
 		const newTask = {
@@ -26,6 +30,7 @@ const Todo = () => {
 			todo: task,
 		}
 		setTasks([...tasks, newTask])
+		handleAlert()
 		setTask('')
 	}
 
@@ -33,6 +38,7 @@ const Todo = () => {
 		const newTasks = tasks.filter((task) => task.id !== id)
 		setTasks(newTasks)
 	}
+
 	const editItem = (id) => {
 		setIsEditing(true)
 		setEditId(id)
@@ -43,7 +49,7 @@ const Todo = () => {
 	const handleEdit = (e) => {
 		e.preventDefault()
 		if (!task) {
-			alert('Please enter value')
+			handleAlert(true, 'Please enter value', 'danger')
 			return
 		}
 		const newTasks = tasks.map((editedTask) => {
@@ -54,6 +60,11 @@ const Todo = () => {
 			return editedTask
 		})
 		setTasks(newTasks)
+		handleAlert()
+	}
+
+	const handleAlert = (show = false, msg = '', type = '') => {
+		setAlert({ show, msg, type })
 	}
 
 	return (
@@ -91,7 +102,7 @@ const Todo = () => {
 					</div>
 				</div>
 			</form>
-			<Alert isAlert={isAlert}></Alert>
+			<Alert clearAlert={handleAlert} {...alert}></Alert>
 			<ul className='list-group'>
 				{tasks.map((task) => {
 					const { id, todo } = task
