@@ -1,21 +1,15 @@
 import React from 'react'
 import { useState, useEffect, useReducer } from 'react'
-import Alert from 'react-bootstrap/Alert'
-import Button from 'react-bootstrap/Button'
-import Container from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
-import Jumbotron from 'react-bootstrap/Jumbotron'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import ListGroup from 'react-bootstrap/ListGroup'
-import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import { FaTrash, FaEdit } from 'react-icons/fa'
+import Alert from './Alert'
 
 const Todo = () => {
 	const [tasks, setTasks] = useState([])
 	const [task, setTask] = useState('')
 	const [isEditing, setIsEditing] = useState(false)
 	const [editId, setEditId] = useState(null)
+	const [isAlert, setIsAlert] = useState(false)
+
 	useEffect(() => {
 		if (tasks) {
 			setIsEditing(false)
@@ -34,6 +28,7 @@ const Todo = () => {
 		setTasks([...tasks, newTask])
 		setTask('')
 	}
+
 	const deleteItem = (id) => {
 		const newTasks = tasks.filter((task) => task.id !== id)
 		setTasks(newTasks)
@@ -44,6 +39,7 @@ const Todo = () => {
 		const editingItem = tasks.find((task) => task.id === id)
 		setTask(editingItem.todo)
 	}
+
 	const handleEdit = (e) => {
 		e.preventDefault()
 		if (!task) {
@@ -59,69 +55,72 @@ const Todo = () => {
 		})
 		setTasks(newTasks)
 	}
+
 	return (
-		<Container className='container'>
-			<Jumbotron>
+		<div className='container'>
+			<div className='container bg-light p-5 rounded-lg m-3'>
 				<h1>Todo</h1>
 				<p>Accomplish tasks.</p>
-			</Jumbotron>
-			<Form>
-				<Form.Row className='align-items-center'>
-					<Col>
-						<Form.Control
+			</div>
+			<form className='m-2'>
+				<div className='row mb-3'>
+					<div className='col-10'>
+						<input
+							className='form-control'
 							type='text'
 							placeholder='Enter a task'
 							value={task}
-							onChange={(e) => setTask(e.target.value)}></Form.Control>
-					</Col>
-					<Col>
+							onChange={(e) => setTask(e.target.value)}></input>
+					</div>
+					<div className='col-2'>
 						{isEditing ? (
-							<Button
-								variant='success'
+							<button
+								className='btn btn-success'
 								type='submit'
 								onClick={(e) => handleEdit(e)}>
 								Edit
-							</Button>
+							</button>
 						) : (
-							<Button type='submit' onClick={(e) => handleSubmit(e)}>
+							<button
+								className='btn btn-primary'
+								type='submit'
+								onClick={(e) => handleSubmit(e)}>
 								Submit
-							</Button>
+							</button>
 						)}
-					</Col>
-				</Form.Row>
-			</Form>
-			<ListGroup>
+					</div>
+				</div>
+			</form>
+			<Alert isAlert={isAlert}></Alert>
+			<ul className='list-group'>
 				{tasks.map((task) => {
 					const { id, todo } = task
 					return (
-						<ListGroup.Item key={id}>
-							<Row className='align-items-center'>
-								<Col sm={10}>
+						<li className='list-group-item' key={id}>
+							<div className='row align-items-center'>
+								<div className='col-10'>
 									<h4>{todo}</h4>
-								</Col>
-								<Col sm={2}>
-									<ButtonGroup>
-										<Button
-											variant='danger'
-											size='lg'
+								</div>
+								<div className='col-2'>
+									<div className='btn-group'>
+										<button
+											className='btn btn-danger btn-lg'
 											onClick={() => deleteItem(id)}>
 											<FaTrash></FaTrash>
-										</Button>
-
-										<Button
-											variant='success'
-											size='lg'
+										</button>
+										<button
+											className='btn btn-success btn-lg'
 											onClick={() => editItem(id)}>
 											<FaEdit></FaEdit>
-										</Button>
-									</ButtonGroup>
-								</Col>
-							</Row>
-						</ListGroup.Item>
+										</button>
+									</div>
+								</div>
+							</div>
+						</li>
 					)
 				})}
-			</ListGroup>
-		</Container>
+			</ul>
+		</div>
 	)
 }
 
