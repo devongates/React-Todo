@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect, useReducer } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { FaTrash, FaEdit } from 'react-icons/fa'
 import Alert from './Alert'
 
@@ -30,13 +30,14 @@ const Todo = () => {
 			todo: task,
 		}
 		setTasks([...tasks, newTask])
-		handleAlert()
+		handleAlert(true, 'Item added', 'success')
 		setTask('')
 	}
 
 	const deleteItem = (id) => {
 		const newTasks = tasks.filter((task) => task.id !== id)
 		setTasks(newTasks)
+		handleAlert(true, 'Item deleted', 'warning')
 	}
 
 	const editItem = (id) => {
@@ -60,7 +61,7 @@ const Todo = () => {
 			return editedTask
 		})
 		setTasks(newTasks)
-		handleAlert()
+		handleAlert(true, 'Item edited', 'primary')
 	}
 
 	const handleAlert = (show = false, msg = '', type = '') => {
@@ -71,10 +72,16 @@ const Todo = () => {
 		<div className='container'>
 			<div className='container bg-light p-5 rounded-lg m-3'>
 				<h1>Todo</h1>
-				<p>Accomplish tasks.</p>
+				<p>
+					{tasks.length === 0
+						? 'Add some tasks to get started'
+						: tasks.length === 1
+						? 'One task to go'
+						: `${tasks.length} tasks to go`}
+				</p>
 			</div>
 			<form className='m-2'>
-				<div className='row mb-3'>
+				<div className='row mb-1'>
 					<div className='col-10'>
 						<input
 							className='form-control'
@@ -102,8 +109,8 @@ const Todo = () => {
 					</div>
 				</div>
 			</form>
-			<Alert clearAlert={handleAlert} {...alert}></Alert>
-			<ul className='list-group'>
+			<Alert clearAlert={handleAlert} {...alert} tasks={tasks}></Alert>
+			<ul className='list-group mb-3'>
 				{tasks.map((task) => {
 					const { id, todo } = task
 					return (

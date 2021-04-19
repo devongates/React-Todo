@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 
-const Alert = ({ clearAlert, show, msg, type }) => {
+const Alert = ({ clearAlert, show, msg, type, tasks }) => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			clearAlert()
@@ -9,9 +9,9 @@ const Alert = ({ clearAlert, show, msg, type }) => {
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [show])
+	}, [tasks, show])
 	return (
-		<div className={`alert alert-${type} fade ${show && 'show'}`}>{msg}</div>
+		<div className={`alert alert-${type} ${show ? 'show' : 'fade'}`}>{msg}</div>
 	)
 }
 
