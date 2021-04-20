@@ -2,10 +2,12 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import Alert from './Alert'
 import Item from './Item'
+import Filter from './Filter'
 
 const Todo = () => {
 	const [tasks, setTasks] = useState([])
 	const [task, setTask] = useState('')
+	const [filteredTasks, setFilteredTasks] = useState([])
 	const [isEditing, setIsEditing] = useState(false)
 	const [editId, setEditId] = useState(null)
 	const [alert, setAlert] = useState({
@@ -13,11 +15,13 @@ const Todo = () => {
 		msg: '',
 		type: '',
 	})
+	const [filter, setFilter] = useState('all')
 
 	useEffect(() => {
 		if (tasks) {
 			setIsEditing(false)
 		}
+		setFilteredTasks(tasks)
 	}, [tasks])
 
 	const handleSubmit = (e) => {
@@ -80,6 +84,27 @@ const Todo = () => {
 		setTasks(newTasks)
 	}
 
+	const handleFilter = (filterBy) => {
+		setFilter(filterBy)
+		if (filterBy === 'all') {
+			setFilteredTasks(tasks)
+			return
+		}
+		if (filterBy === 'complete') {
+			const newTasks = tasks.filter((task) => {
+				return task.done === true
+			})
+			console.log('filtering to completed tasks')
+			setFilteredTasks(newTasks)
+		}
+		if (filterBy === 'incomplete') {
+			const newTasks = tasks.filter((task) => {
+				return task.done === false
+			})
+			setFilteredTasks(newTasks)
+		}
+	}
+
 	return (
 		<div className='container'>
 			<div className='container bg-light p-5 rounded-lg m-3'>
@@ -122,8 +147,9 @@ const Todo = () => {
 				</div>
 			</form>
 			<Alert clearAlert={handleAlert} {...alert} tasks={tasks}></Alert>
+			<Filter display={filter} handleFilter={handleFilter} />
 			<ul className='list-group mb-3'>
-				{tasks.map((task) => {
+				{filteredTasks.map((task) => {
 					return (
 						<Item
 							key={task.id}
