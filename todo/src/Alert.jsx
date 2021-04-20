@@ -9,7 +9,7 @@ const Alert = ({ clearAlert, show, msg, type, tasks }) => {
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [tasks, show])
+	}, [tasks, show, clearAlert])
 	return (
 		<div className={`alert alert-${type} ${show ? 'show' : 'fade'}`}>{msg}</div>
 	)

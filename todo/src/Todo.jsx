@@ -1,7 +1,7 @@
 import React from 'react'
-import { useState, useEffect, useRef } from 'react'
-import { FaTrash, FaEdit } from 'react-icons/fa'
+import { useState, useEffect } from 'react'
 import Alert from './Alert'
+import Item from './Item'
 
 const Todo = () => {
 	const [tasks, setTasks] = useState([])
@@ -19,6 +19,7 @@ const Todo = () => {
 			setIsEditing(false)
 		}
 	}, [tasks])
+
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (!task) {
@@ -28,6 +29,7 @@ const Todo = () => {
 		const newTask = {
 			id: new Date().getTime().toString(),
 			todo: task,
+			done: false,
 		}
 		setTasks([...tasks, newTask])
 		handleAlert(true, 'Item added', 'success')
@@ -66,6 +68,16 @@ const Todo = () => {
 
 	const handleAlert = (show = false, msg = '', type = '') => {
 		setAlert({ show, msg, type })
+	}
+
+	const handleDone = (id) => {
+		const newTasks = tasks.map((task) => {
+			if (task.id === id) {
+				task.done = !task.done
+			}
+			return task
+		})
+		setTasks(newTasks)
 	}
 
 	return (
@@ -112,29 +124,14 @@ const Todo = () => {
 			<Alert clearAlert={handleAlert} {...alert} tasks={tasks}></Alert>
 			<ul className='list-group mb-3'>
 				{tasks.map((task) => {
-					const { id, todo } = task
 					return (
-						<li className='list-group-item' key={id}>
-							<div className='row align-items-center'>
-								<div className='col-10'>
-									<h4>{todo}</h4>
-								</div>
-								<div className='col-2'>
-									<div className='btn-group'>
-										<button
-											className='btn btn-danger btn-lg'
-											onClick={() => deleteItem(id)}>
-											<FaTrash></FaTrash>
-										</button>
-										<button
-											className='btn btn-success btn-lg'
-											onClick={() => editItem(id)}>
-											<FaEdit></FaEdit>
-										</button>
-									</div>
-								</div>
-							</div>
-						</li>
+						<Item
+							key={task.id}
+							{...task}
+							editItem={editItem}
+							deleteItem={deleteItem}
+							handleDone={handleDone}
+						/>
 					)
 				})}
 			</ul>
