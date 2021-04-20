@@ -15,6 +15,8 @@ const Item = ({ id, todo, done, handleDone, deleteItem, editItem }) => {
 								className='btn-check'
 								id={id}
 								autoComplete='off'
+								checked={done}
+								readOnly
 							/>
 							<label
 								className='btn btn-outline-success'
