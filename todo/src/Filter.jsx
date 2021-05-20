@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Filter = ({ display, handleFilter }) => {
+const Filter = ({ display, setFilter, handleFilter }) => {
 	return (
 		<div className='btn-group mb-3' role='group'>
 			<input
@@ -15,7 +15,10 @@ const Filter = ({ display, handleFilter }) => {
 			<label
 				className='btn btn-outline-primary'
 				htmlFor='btnradio1'
-				onClick={() => handleFilter('all')}>
+				onClick={() => {
+					setFilter('all')
+					handleFilter()
+				}}>
 				All
 			</label>
 
@@ -31,7 +34,10 @@ const Filter = ({ display, handleFilter }) => {
 			<label
 				className='btn btn-outline-primary'
 				htmlFor='btnradio2'
-				onClick={() => handleFilter('complete')}>
+				onClick={() => {
+					setFilter('complete')
+					handleFilter()
+				}}>
 				Complete
 			</label>
 
@@ -47,7 +53,10 @@ const Filter = ({ display, handleFilter }) => {
 			<label
 				className='btn btn-outline-primary'
 				htmlFor='btnradio3'
-				onClick={() => handleFilter('incomplete')}>
+				onClick={() => {
+					setFilter('incomplete')
+					handleFilter()
+				}}>
 				Incomplete
 			</label>
 		</div>

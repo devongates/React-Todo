@@ -6,7 +6,7 @@ import Filter from './Filter'
 
 const Todo = () => {
 	const [tasks, setTasks] = useState([])
-	const [task, setTask] = useState('')
+	const [title, setTitle] = useState('')
 	const [filteredTasks, setFilteredTasks] = useState([])
 	const [isEditing, setIsEditing] = useState(false)
 	const [editId, setEditId] = useState(null)
@@ -17,52 +17,75 @@ const Todo = () => {
 	})
 	const [filter, setFilter] = useState('all')
 
-	useEffect(() => {
-		if (tasks) {
-			setIsEditing(false)
+	// Filters tasks into 'all', 'complete', or 'incomplete'
+	const handleFilter = () => {
+		if (filter === 'all') {
+			setFilteredTasks(tasks)
+			return
 		}
-		setFilteredTasks(tasks)
-	}, [tasks])
+		if (filter === 'complete') {
+			const newTasks = tasks.filter((task) => {
+				return task.done === true
+			})
+			setFilteredTasks(newTasks)
+			return
+		}
+		if (filter === 'incomplete') {
+			const newTasks = tasks.filter((task) => {
+				return task.done === false
+			})
+			setFilteredTasks(newTasks)
+			return
+		}
+	}
 
+	useEffect(() => {
+		handleFilter()
+	})
+
+	// Handles when the submit button is clicked
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		if (!task) {
+		if (!title) {
 			handleAlert(true, 'Please enter value', 'danger')
 			return
 		}
 		const newTask = {
 			id: new Date().getTime().toString(),
-			todo: task,
+			title: title,
 			done: false,
 		}
 		setTasks([...tasks, newTask])
 		handleAlert(true, 'Item added', 'success')
-		setTask('')
+		setTitle('')
 	}
 
+	// Handles when the delete button is clicked
 	const deleteItem = (id) => {
 		const newTasks = tasks.filter((task) => task.id !== id)
 		setTasks(newTasks)
 		handleAlert(true, 'Item deleted', 'warning')
 	}
 
+	// Handles when the edit button is clicked
 	const editItem = (id) => {
 		setIsEditing(true)
 		setEditId(id)
 		const editingItem = tasks.find((task) => task.id === id)
-		setTask(editingItem.todo)
+		setTitle(editingItem.title)
 	}
 
+	// Handles when the edit button is clicked
 	const handleEdit = (e) => {
 		e.preventDefault()
-		if (!task) {
+		if (!title) {
 			handleAlert(true, 'Please enter value', 'danger')
 			return
 		}
 		const newTasks = tasks.map((editedTask) => {
 			if (editedTask.id === editId) {
-				editedTask.todo = task
-				setTask('')
+				editedTask.title = title
+				setTitle('')
 			}
 			return editedTask
 		})
@@ -70,10 +93,12 @@ const Todo = () => {
 		handleAlert(true, 'Item edited', 'primary')
 	}
 
+	// Handles how alerts are displayed
 	const handleAlert = (show = false, msg = '', type = '') => {
 		setAlert({ show, msg, type })
 	}
 
+	// Updates the 'done' status of a checked task
 	const handleDone = (id) => {
 		const newTasks = tasks.map((task) => {
 			if (task.id === id) {
@@ -84,30 +109,9 @@ const Todo = () => {
 		setTasks(newTasks)
 	}
 
-	const handleFilter = (filterBy) => {
-		setFilter(filterBy)
-		if (filterBy === 'all') {
-			setFilteredTasks(tasks)
-			return
-		}
-		if (filterBy === 'complete') {
-			const newTasks = tasks.filter((task) => {
-				return task.done === true
-			})
-			console.log('filtering to completed tasks')
-			setFilteredTasks(newTasks)
-		}
-		if (filterBy === 'incomplete') {
-			const newTasks = tasks.filter((task) => {
-				return task.done === false
-			})
-			setFilteredTasks(newTasks)
-		}
-	}
-
 	return (
 		<div className='container'>
-			<div className='container bg-light p-5 rounded-lg m-3'>
+			<div className='container bg-light p-5 rounded-lg my-3'>
 				<h1>Todo</h1>
 				<p>
 					{tasks.length === 0
@@ -119,15 +123,15 @@ const Todo = () => {
 			</div>
 			<form className='m-2'>
 				<div className='row mb-1'>
-					<div className='col-10'>
+					<div className='col-11'>
 						<input
 							className='form-control'
 							type='text'
 							placeholder='Enter a task'
-							value={task}
-							onChange={(e) => setTask(e.target.value)}></input>
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}></input>
 					</div>
-					<div className='col-2'>
+					<div className='col-1 d-flex justify-content-center'>
 						{isEditing ? (
 							<button
 								className='btn btn-success'
@@ -147,7 +151,11 @@ const Todo = () => {
 				</div>
 			</form>
 			<Alert clearAlert={handleAlert} {...alert} tasks={tasks}></Alert>
-			<Filter display={filter} handleFilter={handleFilter} />
+			<Filter
+				display={filter}
+				setFilter={setFilter}
+				handleFilter={handleFilter}
+			/>
 			<ul className='list-group mb-3'>
 				{filteredTasks.map((task) => {
 					return (
