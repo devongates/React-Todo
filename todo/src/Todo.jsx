@@ -111,7 +111,7 @@ const Todo = () => {
 	}
 
 	return (
-		<div className='container'>
+		<div className='container px-5'>
 			<div className='container bg-light p-5 rounded-lg my-3'>
 				<h1>Todo</h1>
 				<p>
