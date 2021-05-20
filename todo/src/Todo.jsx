@@ -65,6 +65,7 @@ const Todo = () => {
 		const newTasks = tasks.filter((task) => task.id !== id)
 		setTasks(newTasks)
 		handleAlert(true, 'Item deleted', 'warning')
+		setIsEditing(false)
 	}
 
 	// Handles when the edit button is clicked
