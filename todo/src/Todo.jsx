@@ -86,6 +86,7 @@ const Todo = () => {
 			if (editedTask.id === editId) {
 				editedTask.title = title
 				setTitle('')
+				setIsEditing(false)
 			}
 			return editedTask
 		})
