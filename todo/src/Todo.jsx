@@ -111,65 +111,67 @@ const Todo = () => {
 	}
 
 	return (
-		<div className='container px-5'>
-			<div className='container bg-light p-5 rounded-lg my-3'>
-				<h1>Todo</h1>
-				<p>
-					{tasks.length === 0
-						? 'Add some tasks to get started'
-						: tasks.length === 1
-						? 'One task to go'
-						: `${tasks.length} tasks to go`}
-				</p>
-			</div>
-			<form className='m-2'>
-				<div className='row mb-1'>
-					<div className='col-11'>
-						<input
-							className='form-control'
-							type='text'
-							placeholder='Enter a task'
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}></input>
-					</div>
-					<div className='col-1 d-flex justify-content-center'>
-						{isEditing ? (
-							<button
-								className='btn btn-success'
-								type='submit'
-								onClick={(e) => handleEdit(e)}>
-								Edit
-							</button>
-						) : (
-							<button
-								className='btn btn-primary'
-								type='submit'
-								onClick={(e) => handleSubmit(e)}>
-								Submit
-							</button>
-						)}
-					</div>
+		<div className='container d-flex justify-content-center'>
+			<div className='w-75'>
+				<div className='container bg-light p-5 rounded-lg my-3'>
+					<h1>Todo</h1>
+					<p>
+						{tasks.length === 0
+							? 'Add some tasks to get started'
+							: tasks.length === 1
+							? 'One task to go'
+							: `${tasks.length} tasks to go`}
+					</p>
 				</div>
-			</form>
-			<Alert clearAlert={handleAlert} {...alert} tasks={tasks}></Alert>
-			<Filter
-				display={filter}
-				setFilter={setFilter}
-				handleFilter={handleFilter}
-			/>
-			<ul className='list-group mb-3'>
-				{filteredTasks.map((task) => {
-					return (
-						<Item
-							key={task.id}
-							{...task}
-							editItem={editItem}
-							deleteItem={deleteItem}
-							handleDone={handleDone}
-						/>
-					)
-				})}
-			</ul>
+				<form className='m-2'>
+					<div className='row mb-1'>
+						<div className='col-11'>
+							<input
+								className='form-control'
+								type='text'
+								placeholder='Enter a task'
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}></input>
+						</div>
+						<div className='col-1 d-flex justify-content-center'>
+							{isEditing ? (
+								<button
+									className='btn btn-success'
+									type='submit'
+									onClick={(e) => handleEdit(e)}>
+									Edit
+								</button>
+							) : (
+								<button
+									className='btn btn-primary'
+									type='submit'
+									onClick={(e) => handleSubmit(e)}>
+									Submit
+								</button>
+							)}
+						</div>
+					</div>
+				</form>
+				<Alert clearAlert={handleAlert} {...alert} tasks={tasks}></Alert>
+				<Filter
+					display={filter}
+					setFilter={setFilter}
+					handleFilter={handleFilter}
+				/>
+				<ul className='list-group mb-5'>
+					{filteredTasks.map((task) => {
+						return (
+							<Item
+								key={task.id}
+								{...task}
+								editItem={editItem}
+								deleteItem={deleteItem}
+								handleDone={handleDone}
+							/>
+						)
+					})}
+				</ul>
+			</div>
 		</div>
 	)
 }

@@ -37,7 +37,7 @@ const Item = ({ id, title, done, handleDone, deleteItem, editItem }) => {
 					<h4>{title}</h4>
 				</div>
 				<div className='col-1'>
-					<div className='dropdown'>
+					<div className='dropend'>
 						<button
 							className='btn dropdown-toggle'
 							type='button'
@@ -48,7 +48,7 @@ const Item = ({ id, title, done, handleDone, deleteItem, editItem }) => {
 							<RiSettings4Line size={30} />
 						</button>
 						<ul
-							className={`dropdown-menu ${isShowDropdown && 'show'}`}
+							className={`dropdown-menu ms-4 ${isShowDropdown && 'show'}`}
 							aria-labelledby={id}>
 							<li>
 								<button
