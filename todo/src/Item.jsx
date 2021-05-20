@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaTrash, FaEdit, FaCheck } from 'react-icons/fa'
 
-const Item = ({ id, todo, done, handleDone, deleteItem, editItem }) => {
+const Item = ({ id, title, done, handleDone, deleteItem, editItem }) => {
 	return (
 		<li
 			key={id}
@@ -31,7 +31,7 @@ const Item = ({ id, todo, done, handleDone, deleteItem, editItem }) => {
 					</div>
 				</div>
 				<div className='col-8'>
-					<h4>{todo}</h4>
+					<h4>{title}</h4>
 				</div>
 				<div className='col-2'>
 					<div className='btn-group d-flex justify-content-end'>
