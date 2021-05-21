@@ -131,7 +131,28 @@ const Todo = () => {
 			return true
 		}
 		return false
-		// setIsShowPriority(highPriorityTasks)
+	}
+
+	const getProgress = () => {
+		const leftToDo = tasks.reduce((acc, task) => {
+			if (task.highPriority) {
+				return acc + 80
+			} else {
+				return acc + 20
+			}
+		}, 0)
+		const progress = tasks.reduce((acc, task) => {
+			if (task.highPriority && task.done) {
+				return acc + 80
+			}
+			if (!task.highPriority && task.done) {
+				return acc + 20
+			}
+			return acc
+		}, 0)
+		console.log(leftToDo)
+		console.log(progress)
+		return (progress / leftToDo) * 100
 	}
 
 	return (
@@ -177,14 +198,27 @@ const Todo = () => {
 					</div>
 				</form>
 				<Alert clearAlert={handleAlert} {...alert} tasks={tasks}></Alert>
-				<Filter
-					display={filter}
-					setFilter={setFilter}
-					handleFilter={handleFilter}
-				/>
+				{tasks.length > 0 && (
+					<>
+						<Filter
+							display={filter}
+							setFilter={setFilter}
+							handleFilter={handleFilter}
+						/>
+						<div className='progress'>
+							<div
+								className='progress-bar progress-bar-striped progress-bar-animated'
+								role='progressbar'
+								aria-valuenow='75'
+								aria-valuemin='0'
+								aria-valuemax='100'
+								style={{ width: `${getProgress()}%` }}></div>
+						</div>
+					</>
+				)}
 				{checkPriority() && (
 					<>
-						<h4 className='text-center mb-4'>High Priority</h4>
+						<h4 className='text-center my-4'>High Priority</h4>
 						<hr />
 					</>
 				)}
