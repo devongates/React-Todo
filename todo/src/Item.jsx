@@ -3,7 +3,16 @@ import { useState, useEffect } from 'react'
 import { FaTrash, FaEdit, FaCheck } from 'react-icons/fa'
 import { RiSettings4Line } from 'react-icons/ri'
 
-const Item = ({ id, title, done, handleDone, deleteItem, editItem }) => {
+const Item = ({
+	id,
+	title,
+	done,
+	highPriority,
+	handleDone,
+	deleteItem,
+	editItem,
+	handlePriority,
+}) => {
 	const [isShowDropdown, setIsShowDropdown] = useState(false)
 	return (
 		<li
@@ -70,6 +79,15 @@ const Item = ({ id, title, done, handleDone, deleteItem, editItem }) => {
 										deleteItem(id)
 									}}>
 									Delete
+								</button>
+								<button
+									className='dropdown-item'
+									type='button'
+									onClick={() => {
+										setIsShowDropdown(false)
+										handlePriority(id)
+									}}>
+									{`Set to ${highPriority ? 'low' : 'high'} priority`}
 								</button>
 							</li>
 						</ul>

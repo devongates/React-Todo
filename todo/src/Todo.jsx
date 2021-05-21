@@ -54,6 +54,7 @@ const Todo = () => {
 			id: new Date().getTime().toString(),
 			title: title,
 			done: false,
+			highPriority: false,
 		}
 		setTasks([...tasks, newTask])
 		handleAlert(true, 'Item added', 'success')
@@ -65,7 +66,9 @@ const Todo = () => {
 		const newTasks = tasks.filter((task) => task.id !== id)
 		setTasks(newTasks)
 		handleAlert(true, 'Item deleted', 'warning')
-		setIsEditing(false)
+		if (id === editId) {
+			setIsEditing(false)
+		}
 	}
 
 	// Handles when the edit button is clicked
@@ -109,6 +112,26 @@ const Todo = () => {
 			return task
 		})
 		setTasks(newTasks)
+	}
+
+	// Updates task priority
+	const handlePriority = (id) => {
+		const newTasks = tasks.map((task) => {
+			if (task.id === id) {
+				task.highPriority = !task.highPriority
+			}
+			return task
+		})
+		setTasks(newTasks)
+	}
+
+	// Checks if any tasks have high priority
+	const checkPriority = () => {
+		if (tasks.filter((task) => task.highPriority).length > 0) {
+			return true
+		}
+		return false
+		// setIsShowPriority(highPriorityTasks)
 	}
 
 	return (
@@ -159,16 +182,49 @@ const Todo = () => {
 					setFilter={setFilter}
 					handleFilter={handleFilter}
 				/>
-				<ul className='list-group mb-5'>
+				{checkPriority() && (
+					<>
+						<h4 className='text-center mb-4'>High Priority</h4>
+						<hr />
+					</>
+				)}
+				<ul className='list-group mb-4'>
 					{filteredTasks.map((task) => {
 						return (
-							<Item
-								key={task.id}
-								{...task}
-								editItem={editItem}
-								deleteItem={deleteItem}
-								handleDone={handleDone}
-							/>
+							task.highPriority && (
+								<Item
+									key={task.id}
+									{...task}
+									editItem={editItem}
+									deleteItem={deleteItem}
+									handleDone={handleDone}
+									handlePriority={handlePriority}
+									checkPriority={checkPriority}
+								/>
+							)
+						)
+					})}
+				</ul>
+				{checkPriority() && (
+					<>
+						<h4 className='text-center mb-4'>Low Priority</h4>
+						<hr />
+					</>
+				)}
+				<ul className='list-group mb-4'>
+					{filteredTasks.map((task) => {
+						return (
+							!task.highPriority && (
+								<Item
+									key={task.id}
+									{...task}
+									editItem={editItem}
+									deleteItem={deleteItem}
+									handleDone={handleDone}
+									handlePriority={handlePriority}
+									checkPriority={checkPriority}
+								/>
+							)
 						)
 					})}
 				</ul>
